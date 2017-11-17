@@ -1,0 +1,39 @@
+
+因为接口中运用了HASH算法，首先安装OPENSSL库，流程如下
+另外，有发送GET DATA REGISTER包的程序必然用到了HASH算法，请在程序后面加上-ldl -lcrypto
+用到多线程的程序，请加上-lpthread
+
+
+解压openssl-1.0.2f.tar.gz文件
+cd 到解压的目录 openssl-1.0.2f
+执行    ./config
+       make
+       make tet
+	make install
+openssl 安装完成
+你到/usr/local/ssl目录下就可以看到安装好的openssl文件，其中/usr/local/ssl/include是openssl的头文件
+							   /usr/local/ssl/lib是openssl的库文件
+
+修改环境变量让gcc在编译hash程序时找到openssl的头文件和库文件
+执行如下命令：
+	cd /home/XXXX(username)
+	gedit .bashrc
+	添加  export C_INCLUDE_PATH=/usr/local/ssl/include:$C_INCLUDE_PATH 
+	     export LIBRARY_PATH=/usr/local/ssl/lib:$LIBRARY_PATH
+	保存即可
+
+这两个程序hash.c是对字符串进行hash的，hash_file.c是对文件进行hash的
+编译这两个程序的命令：gcc hash.c -o hash -lcrypto
+	           gcc hash_file.c -o hash_file -lcrypto
+     -lcrypto是链接openssl的加密库
+
+这个hash_file.c对openssl-1.0.2f.tar.gz这个压缩包进行了hash,你可以看到执行的结果sha1和sha256 这两种hash的方法得到的结果与从官方下载的openssl-1.0.2f.tar.gz.sha1
+                                                                                                                                     和openssl-1.0.2f.tar.gz.sha256
+	                                                                                                                             一致。
+
+用于完整性校验的常用的hash算法有：MD5（128bit） SHA1(160bit) SHA256(256bit) SHA512(512bit)
+
+																													
+
+
+
